@@ -1,0 +1,16 @@
+/* 背景色 */
+body {
+    background-color: #f5f7fa;
+}
+
+/* タイトル部分 */
+.topbar {
+    background-color: #1a73e8 !important;
+}
+
+/* ロゴを左上に表示 */
+.topbar-wrapper .link img {
+    content: url("/static/logo.png");
+    width: 120px;
+    height: auto;
+}
