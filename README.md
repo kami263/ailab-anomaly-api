@@ -278,4 +278,83 @@ Time
 ▼
 End
 
+1. 📊 サンプルコード（Python / cURL / JavaScript）
+API をどう呼べばいいか、すぐ分かるようにするだけで利用者のハードルが大きく下がります。
+Python Example
+import requests
+
+payload = {"values": [1.2, 0.9, 1.1]}
+res = requests.post("http://localhost:8000/anomaly", json=payload)
+
+print(res.json())
+
+
+cURL Example
+curl -X POST http://localhost:8000/anomaly \
+  -H "Content-Type: application/json" \
+  -d '{"values":[1.2,0.9,1.1]}'2. 📈 閾値のチューニング方法
+製造業ユーザーは「閾値をどう決めるか」を最も気にします。
+例として：
+• 	再構成誤差の分布を可視化する方法
+• 	95% 信頼区間を閾値にする例
+• 	data.csv を使った閾値推定コード
+
+import numpy as np
+
+errors = np.loadtxt("reconstruction_errors.csv")
+threshold = np.percentile(errors, 95)
+print("Recommended threshold:", threshold)
+
+3. 🧪 テスト方法（Unit Test / API Test）
+FastAPI は pytest と相性が良いので、簡単なテスト例を載せると信頼性が上がります。
+
+from fastapi.testclient import TestClient
+from main import app
+
+client = TestClient(app)
+
+def test_anomaly_api():
+    res = client.post("/anomaly", json={"values": [1, 2, 3]})
+    assert res.status_code == 200
+
+    
+4. 📁 モデルの再学習方法（Training Guide）
+利用者が自分のデータで学習し直せるようにすると、プロジェクトの価値が一気に上がります。
+例：
+• 	 の追加
+• 	学習データの形式
+• 	学習コマンド
+• 	model.pth の更新方法
+
+python train.py --data data.csv --output model.pth
+
+5. 🧩 API 拡張ガイド（How to Customize）
+製造業の現場では「自社仕様に合わせたい」というニーズが強いので、以下のようなガイドがあると喜ばれます。
+• 	入力次元を変更する方法
+• 	モデル構造を変更する方法
+• 	閾値ロジックを差し替える方法
+• 	Web UI のカスタマイズ方法
+
+
+6. 📡 本番運用ガイド（Deployment Guide）
+製造業の現場では「安定稼働」が最重要。
+追加すると良い内容：
+• 	systemd による常駐化
+• 	Nginx リバースプロキシ設定
+• 	Docker Compose 例
+• 	GPU 対応（任意）7. 📉 性能指標（Latency / Throughput / Model Size）
+API の性能が分かると、導入判断がしやすくなります。
+例：
+
+
+
+
+
+
+
+
+
+
+  
+
 
