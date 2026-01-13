@@ -27,13 +27,13 @@ FastAPI + PyTorch で構築され、REST API として簡単に統合できま�
 git clone https://github.com/kami263/ailab-anomaly-api
 cd ailab-anomaly-api
 
-2. Install dependencies
+### 2. Install dependencies
 pip install -r requirements.txt
 
-3. Run API
+### 3. Run API
 uvicorn main:app --reload
 
-4. Access
+### 4. Access
 • 	API Docs: http://localhost:8000/docs
 • 	Web UI: http://localhost:8000/
 
