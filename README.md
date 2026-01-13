@@ -27,16 +27,6 @@ FastAPI + PyTorch で構築され、REST API として簡単に統合できま�
 git clone https://github.com/kami263/ailab-anomaly-api
 cd ailab-anomaly-api
 
-### 2. Install dependencies
-pip install -r requirements.txt
-
-### 3. Run API
-uvicorn main:app --reload
-
-### 4. Access
-• 	API Docs: http://localhost:8000/docs
-• 	Web UI: http://localhost:8000/
-
 🧠 Model Overview
 本 API は AutoEncoder を使用しており、
 正常データのみで学習 → 再構成誤差が大きいほど異常と判定 します。
