@@ -483,15 +483,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-❓ FAQ（よくある質問）
-Q. 入力次元が違うと言われる
-→ モデル学習時と API 入力の次元が一致しているか確認してください。
-Q. model.pth が読み込めない
-→ PyTorch のバージョン差異が原因の場合があります。
-Q. 閾値はどう決める？
-→ 再構成誤差の分布を可視化し、95〜99% の範囲を推奨します。
-Q. Docker で GPU を使いたい
-→ nvidia-docker2 を利用し、--gpus all を付与してください。
 
 🏭 実運用シナリオ（Case Studies）
 CNC 加工機の振動異常検知
