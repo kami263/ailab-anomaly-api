@@ -36,26 +36,7 @@ cd ailab-anomaly-api
 • 	:  or 
 閾値は  内で設定されています。
 
-🔍  API Specification
-POST  — Detect Anomaly
-Request (JSON)
-{
-  "values": [1.2, 0.9, 1.1]
-}
-Response (JSON)
-{
-  "score": 0.034,
-  "status": "normal"
-}
-Description
-• 	入力ベクトルを AutoEncoder に通し、再構成誤差を計算
-• 	閾値を超えると  を返す
 
-🐳 Docker Support
-Build
-docker build -t anomaly-api .
-Run
-docker run -p 8000:8000 anomaly-api
 
 Project Structure
 ailab-anomaly-api/
