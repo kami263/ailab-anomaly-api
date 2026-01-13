@@ -349,32 +349,6 @@ API レイテンシ 3–5 ms
 • 	温度センサーのドリフト検知
 • 	ベアリング故障の早期兆候検知
 
-🧪 サンプルコード（API Usage Examples）
-Python
-import requests
-
-payload = {"values": [1.2, 0.9, 1.1]}
-res = requests.post("http://localhost:8000/anomaly", json=payload)
-
-print(res.json())
-
-cURL
-curl -X POST http://localhost:8000/anomaly \
-  -H "Content-Type: application/json" \
-  -d '{"values":[1.2,0.9,1.1]}'
-
-JavaScript (Node.js)
-import fetch from "node-fetch";
-
-const res = await fetch("http://localhost:8000/anomaly", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ values: [1.2, 0.9, 1.1] })
-});
-
-console.log(await res.json());
-
-
 📈 閾値チューニングガイド（Threshold Tuning）
 AutoEncoder の再構成誤差はデータセットに依存するため、
 適切な閾値を設定することが異常検知精度の鍵になります。
@@ -436,6 +410,7 @@ torch.save(model.state_dict(), "model.pth")
  model.pth を API と同じディレクトリに配置するだけで OK。
 
 🧩 API カスタマイズガイド（Customization Guide）
+
 入力次元を変更する
  anomaly_model.pyの AutoEncoder 定義を変更
  model = AutoEncoder(input_dim=<your_dim>)
