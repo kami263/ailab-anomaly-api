@@ -263,7 +263,7 @@ app.add_middleware(
 
 # 📄 License
 
-MIT License
+
 
 ---
 
@@ -274,7 +274,6 @@ MIT License
 
 ---
 
-必要なら、GitHub の README に貼る **サムネイル画像** や **プロジェクトロゴ** もデザインできます。
 
 
 
