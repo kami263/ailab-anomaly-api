@@ -37,7 +37,7 @@ uvicorn main:app --reload
 • 	API Docs: http://localhost:8000/docs
 • 	Web UI: http://localhost:8000/
 
-Model Overview
+🧠 Model Overview
 本 API は AutoEncoder を使用しており、
 正常データのみで学習 → 再構成誤差が大きいほど異常と判定 します。
 • 	入力: 数値ベクトル（例：センサー値）
@@ -46,7 +46,7 @@ Model Overview
 • 	:  or 
 閾値は  内で設定されています。
 
- API Specification
+🔍  API Specification
 POST  — Detect Anomaly
 Request (JSON)
 {
@@ -65,6 +65,31 @@ Description
 Build
 docker build -t anomaly-api .
 Run
+docker run -p 8000:8000 anomaly-api
+
+Project Structure
+ailab-anomaly-api/
+├── main.py               # FastAPI エントリポイント
+├── anomaly_model.py      # AutoEncoder モデル & 推論ロジック
+├── model.pth             # 学習済みモデル
+├── data.csv              # サンプルデータ
+├── templates/            # Web UI
+├── static/               # CSS / JS
+├── Dockerfile
+└── requirements.txt
+
+🛠 Future Improvements
+• 	API Key 認証の追加
+• 	閾値の自動最適化
+• 	マルチセンサー対応
+• 	モデルのオンライン学習
+
+📄 License
+MIT License（必要に応じて変更してください）
+
+👤 Author
+kami263
+製造業向け AI ソリューション開発
 
 
 
