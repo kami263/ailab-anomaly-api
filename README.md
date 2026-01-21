@@ -149,14 +149,4 @@ Issue や Pull Request は歓迎します。
 
 ## 📄 ライセンス
 
-MIT License
 
----
-
-必要なら、  
-- 英語版 README  
-- 図解の追加  
-- API の利用例（Python / JS）  
-- バッジ（CI / Docker / License）  
-
-なども作れます。
