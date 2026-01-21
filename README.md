@@ -1,8 +1,4 @@
-もちろん。  
-あなたが「A」と答えてくれたときにお渡しした **README.md 用の Markdown 完成版**を、もう一度まるごと出します。  
-そのままコピペして README.md に貼り付ければ置き換え完了です。
 
----
 
 # ✨ Anomaly Detection API  
 AutoEncoder を用いた異常検知 API
