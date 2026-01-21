@@ -1,283 +1,166 @@
+もちろん。  
+あなたが「A」と答えてくれたときにお渡しした **README.md 用の Markdown 完成版**を、もう一度まるごと出します。  
+そのままコピペして README.md に貼り付ければ置き換え完了です。
 
-# 📦 Installation
+---
 
-## 1. Clone
+# ✨ Anomaly Detection API  
+AutoEncoder を用いた異常検知 API
+
+このリポジトリは、AutoEncoder モデルを利用した異常検知 API を提供します。  
+製造業の品質管理、設備監視、センサーデータ分析など、異常値の早期発見が必要な場面で活用できます。
+
+---
+
+## 🚀 特徴
+
+- **AutoEncoder による高精度な異常検知**  
+  正常データのみで学習したモデルを使用し、再構成誤差から異常スコアを算出します。
+- **REST API として提供**  
+  FastAPI ベースで軽量・高速。外部システムとの連携が容易。
+- **Docker 対応**  
+  すぐにコンテナとしてデプロイ可能。
+- **シンプルな JSON インターフェース**  
+  数値データを送るだけで異常スコアと判定結果を返します。
+
+---
+
+## 📁 プロジェクト構成
+
+```
+ailab-anomaly-api/
+├── anomaly_model.py        # AutoEncoder モデルの定義と推論処理
+├── model.pth               # 学習済みモデル
+├── main.py                 # FastAPI アプリケーション
+├── data.csv                # 学習用データ（例）
+├── templates/              # Web UI 用テンプレート
+├── static/                 # CSS などの静的ファイル
+├── Dockerfile              # Docker イメージ構築用
+├── requirements.txt        # 依存パッケージ
+└── README.md               # このファイル
+```
+
+---
+
+## 🔧 セットアップ
+
+### 1. リポジトリをクローン
+
 ```bash
-git clone https://github.com/kami263/ailab-anomaly-api
+git clone https://github.com/kami263/ailab-anomaly-api.git
 cd ailab-anomaly-api
 ```
 
-## 2. Install dependencies
+### 2. 依存パッケージをインストール
+
 ```bash
 pip install -r requirements.txt
 ```
 
-## 3. Run API
+### 3. API を起動
+
 ```bash
-uvicorn main:app --reload
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## 4. Access
-- API Docs: http://localhost:8000/docs  
-- Web UI: http://localhost:8000/
+起動後、以下にアクセスできます：
+
+- Swagger UI  
+  http://localhost:8000/docs  
+- ReDoc  
+  http://localhost:8000/redoc
 
 ---
 
-# 🔍 API Specification
+## 🧪 API 仕様
 
-## POST `/anomaly` — Detect Anomaly
+### POST `/anomaly` — 異常検知
 
-### Request
+#### リクエスト例
+
 ```json
 {
-  "values": [1.2, 0.9, 1.1]
+  "values": [1.2, 0.9, 1.1, 1.0]
 }
 ```
 
-### Response
+#### レスポンス例
+
 ```json
 {
-  "score": 0.034,
+  "anomaly_score": 0.0342,
   "status": "normal"
 }
 ```
 
----
+#### パラメータ説明
 
-
-# 🧪 Usage Examples
-
-## Python
-```python
-import requests
-
-payload = {"values": [1.2, 0.9, 1.1]}
-res = requests.post("http://localhost:8000/anomaly", json=payload)
-
-print(res.json())
-```
-
-## cURL
-```bash
-curl -X POST http://localhost:8000/anomaly \
-  -H "Content-Type: application/json" \
-  -d '{"values":[1.2,0.9,1.1]}'
-```
-
-## JavaScript
-```javascript
-const res = await fetch("http://localhost:8000/anomaly", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ values: [1.2, 0.9, 1.1] })
-});
-console.log(await res.json());
-```
+| パラメータ | 型 | 説明 |
+|-----------|----|------|
+| values | array(float) | 数値データの配列 |
 
 ---
 
-# 🧠 Model Overview
+## 🧠 モデル概要
 
-AutoEncoder による異常検知モデル：
-
-```
-Input (x)
-   │
-   ▼
-Encoder (Linear → ReLU)
-   │
-   ▼
-Bottleneck (latent space)
-   │
-   ▼
-Decoder (Linear → ReLU)
-   │
-   ▼
-Reconstructed Output (x')
-```
-
-**Reconstruction Error = || x - x' ||**  
-**Anomaly Score = Reconstruction Error**
+- **モデル:** AutoEncoder  
+- **学習データ:** 正常データのみ  
+- **異常判定:**  
+  - 再構成誤差（MSE）を異常スコアとして使用  
+  - 閾値を超えると `anomaly` と判定  
 
 ---
 
-# 📈 Threshold Tuning Guide
+## 🐳 Docker での利用
 
-## 再構成誤差の分布を可視化
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+### イメージをビルド
 
-errors = np.loadtxt("reconstruction_errors.csv")
-
-plt.hist(errors, bins=50)
-plt.show()
-```
-
-## 推奨閾値（95%）
-```python
-threshold = np.percentile(errors, 95)
-print("Recommended threshold:", threshold)
-```
-
----
-
-# 🧠 Training Guide
-
-## データ形式
-```
-1.2,0.9,1.1
-1.0,1.1,0.95
-...
-```
-
-## 学習スクリプト例
-```python
-import torch
-from anomaly_model import AutoEncoder
-import numpy as np
-
-data = np.loadtxt("data.csv", delimiter=",")
-data = torch.tensor(data, dtype=torch.float32)
-
-model = AutoEncoder(input_dim=data.shape[1])
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-criterion = torch.nn.MSELoss()
-
-for epoch in range(100):
-    output = model(data)
-    loss = criterion(output, data)
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-
-torch.save(model.state_dict(), "model.pth")
-```
-
----
-
-# 🧩 Customization Guide
-
-### 入力次元を変更
-```python
-model = AutoEncoder(input_dim=<your_dim>)
-```
-
-### 閾値ロジックを変更
-```python
-status = "anomaly" if score > THRESHOLD else "normal"
-```
-
----
-
-# 🐳 Docker Support
-
-## Build
 ```bash
 docker build -t anomaly-api .
 ```
 
-## Run
+### コンテナを起動
+
 ```bash
 docker run -p 8000:8000 anomaly-api
 ```
 
 ---
 
-# 📁 Project Structure
+## 🌐 Web UI（任意）
 
-```
-ailab-anomaly-api/
-├── main.py
-├── anomaly_model.py
-├── model.pth
-├── data.csv
-├── templates/
-├── static/
-├── Dockerfile
-└── requirements.txt
-```
+`/` にアクセスすると、簡易的な入力フォームが利用できます。  
+ブラウザから直接異常検知を試せます。
 
 ---
 
-# 🏭 Manufacturing Use Case
+## 📈 今後の改善予定
 
-```
-Factory Line → Sensors → Edge Device → Anomaly Detection API
-→ MES / Dashboard → Operators
-```
-
-- 振動・温度・電流・音響などのセンサー値をリアルタイム監視  
-- 異常スコアが閾値を超えるとアラート発報  
-- 予知保全・品質改善に活用  
+- API キー認証の追加  
+- モデルの再学習 API  
+- 異常スコアの可視化  
+- マルチ変量データ対応  
+- 時系列モデル（LSTM AutoEncoder）対応  
 
 ---
 
-# 📉 Performance Metrics
+## 🤝 コントリビューション
 
-| 指標 | 値（例） |
-|------|----------|
-| 推論速度 | 1.2 ms |
-| モデルサイズ | 120 KB |
-| API レイテンシ | 3–5 ms |
-| メモリ使用量 | ~50 MB |
+Issue や Pull Request は歓迎します。  
+改善案やバグ報告があれば気軽にどうぞ。
 
 ---
 
-# 🔐 Security Guide
+## 📄 ライセンス
 
-### CORS 設定
-```python
-from fastapi.middleware.cors import CORSMiddleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
+MIT License
 
 ---
 
-# ❓ FAQ
+必要なら、  
+- 英語版 README  
+- 図解の追加  
+- API の利用例（Python / JS）  
+- バッジ（CI / Docker / License）  
 
-### 入力次元が違う  
-→ モデル学習時と一致しているか確認。
-
-### model.pth が読み込めない  
-→ PyTorch バージョン差異の可能性。
-
-### 閾値はどう決める？  
-→ 再構成誤差の 95〜99% を推奨。
-
----
-
-# 🛠 Future Improvements
-
-- API Key 認証  
-- 閾値の自動最適化  
-- マルチセンサー対応  
-- オンライン学習  
-
----
-
-# 📄 License
-
-
-
----
-
-# 👤 Author
-
-**kami263**  
-製造業向け AI ソリューション開発
-
----
-
-
-
-
-
-
-
-
+なども作れます。
