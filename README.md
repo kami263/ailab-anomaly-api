@@ -1,6 +1,6 @@
 
 
-# ✨ Anomaly Detection API  
+# ✨  Anomaly Detection API  
 AutoEncoder を用いた異常検知 API
 
 このリポジトリは、AutoEncoder モデルを利用した異常検知 API を提供します。  
