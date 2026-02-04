@@ -5,6 +5,19 @@ from fastapi.openapi.docs import get_swagger_ui_html
 
 from app.utils.logger import setup_logging
 from app.routers import anomaly, predict, system
+from contextlib import asynccontextmanager
+from app.services.detector import AnomalyDetector # 仮のクラス名
+
+# 状態保持用の辞書
+ml_models = {}
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 起動時にモデルをロード
+    ml_models["anomaly_detector"] = AnomalyDetector("models/model.pth")
+    yield
+    # 終了時のクリーンアップ（GPUメモリ解放など）
+    ml_models.clear()
 
 app = FastAPI(
     title="Anomaly Detection API",
